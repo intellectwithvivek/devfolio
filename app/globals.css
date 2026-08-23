@@ -1,26 +1,773 @@
-@import "tailwindcss";
+/* ==========================================================================
+   DevFolio — the only stylesheet in the project.
+
+   VivekUI wraps every one of its own selectors in :where(), which has
+   specificity zero, so a single flat class here always wins. There is no
+   !important anywhere in this file, and there does not need to be.
+
+   Order: tokens → base → signature element → sections → utilities.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens — accent, fonts, chart palette
+
+   Every VivekUI value is a CSS custom property. Re-pointing --vk-color-primary
+   rebrands the entire library, so this block is the whole theme.
+   -------------------------------------------------------------------------- */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Violet, light mode. #6d28d9 carries white text at 7.1:1. */
+  --vk-color-primary: #6d28d9;
+  --vk-color-primary-fg: #ffffff;
+  --vk-color-primary-hover: #5b21b6;
+  --vk-color-primary-active: #4c1d95;
+  --vk-color-primary-subtle: #f3ecff;
+  --vk-color-primary-subtle-fg: #5b21b6;
+  --vk-color-ring: #6d28d9;
+
+  --vk-font-sans: var(--font-sans), -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', Roboto, sans-serif;
+  --vk-font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* The one chart colour that shows up on this site follows the accent. */
+  --vk-chart-1: #6d28d9;
+
+  /* DevFolio's own tokens, all derived from the accent above. */
+  --df-display: var(--font-display), var(--vk-font-sans);
+  --df-accent-2: #db2777;
+  --df-glow: color-mix(in oklab, var(--vk-color-primary) 26%, transparent);
+  --df-hairline: color-mix(in oklab, var(--vk-color-fg) 8%, transparent);
+  --df-tile-hover: color-mix(in oklab, var(--vk-color-primary) 4%, var(--vk-color-surface));
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme='dark'] {
+  /* #a78bfa on #0a0a0b is 7.2:1; the near-black foreground on it is 7.0:1. */
+  --vk-color-primary: #a78bfa;
+  --vk-color-primary-fg: #16062e;
+  --vk-color-primary-hover: #c4b5fd;
+  --vk-color-primary-active: #8b5cf6;
+  --vk-color-primary-subtle: #1e1533;
+  --vk-color-primary-subtle-fg: #c9b8ff;
+  --vk-color-ring: #a78bfa;
+
+  --vk-chart-1: #a78bfa;
+
+  --df-accent-2: #f0abfc;
+  --df-glow: color-mix(in oklab, var(--vk-color-primary) 30%, transparent);
+  --df-hairline: color-mix(in oklab, var(--vk-color-fg) 10%, transparent);
+  --df-tile-hover: color-mix(in oklab, var(--vk-color-primary) 7%, var(--vk-color-surface));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--vk-color-bg);
+  color: var(--vk-color-fg);
+  font-family: var(--vk-font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* `min-inline-size: 0` matters: body is a column flex container, and a flex
+   item's automatic minimum size is its min-content width. The marquee's track
+   is thousands of pixels wide, so without this the whole page grows to fit it
+   and scrolls sideways on a phone. */
+#main {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Keyboard-only escape hatch past the navbar. */
+.df-skip {
+  position: absolute;
+  inset-inline-start: var(--vk-space-4);
+  inset-block-start: var(--vk-space-4);
+  z-index: 100;
+  padding: var(--vk-space-2) var(--vk-space-4);
+  border-radius: var(--vk-radius-md);
+  background: var(--vk-color-primary);
+  color: var(--vk-color-primary-fg);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.df-skip:focus-visible {
+  transform: translateY(0);
+}
+
+/* The navbar promotion badge. It shortens rather than disappearing on a phone —
+   the credit is the point of the badge, so it stays at every width. */
+.df-nav-badge {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.df-badge-short {
+  display: none;
+}
+
+@container vk-navbar (width < 48rem) {
+  .df-badge-long {
+    display: none;
+  }
+
+  .df-badge-short {
+    display: inline;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. The signature element
+
+   An oversized display headline with an accent rule that draws itself in
+   underneath one phrase. It is the single loud gesture on the site; every
+   other surface is deliberately quiet so this one lands.
+   -------------------------------------------------------------------------- */
+
+.df-display {
+  display: inline-block;
+  font-family: var(--df-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+  /* The floor is set by the longest unbreakable phrase — `.df-mark` cannot wrap
+     without splitting its underline, so it has to fit a 320px viewport. */
+  font-size: clamp(1.95rem, 6vw, 4.75rem);
+  text-wrap: balance;
+  /* Room under the last line for the accent rule, which sits outside the text box. */
+  padding-block-end: 0.14em;
+}
+
+.df-mark {
+  position: relative;
+  white-space: nowrap;
+  color: var(--vk-color-fg);
+}
+
+.df-mark::after {
+  content: '';
+  position: absolute;
+  inset-inline: -0.04em;
+  inset-block-end: 0.02em;
+  block-size: 0.11em;
+  border-radius: var(--vk-radius-full);
+  background: linear-gradient(90deg, var(--vk-color-primary), var(--df-accent-2));
+  transform-origin: left center;
+  animation: df-draw 900ms cubic-bezier(0.2, 0.75, 0.2, 1) 250ms both;
+}
+
+@keyframes df-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Static, not slower: the rule is simply already there. */
+@media (prefers-reduced-motion: reduce) {
+  .df-mark::after {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Hero
+   -------------------------------------------------------------------------- */
+
+.df-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  border-block-end: 1px solid var(--vk-color-border-subtle);
+}
+
+/* One violet bloom behind the headline, and a faint dot grid over it. */
+.df-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  inset-block-start: -30%;
+  inset-inline-start: 50%;
+  inline-size: min(72rem, 130%);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  background: radial-gradient(circle at 50% 42%, var(--df-glow), transparent 62%);
+  pointer-events: none;
+}
+
+.df-hero::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: radial-gradient(var(--df-hairline) 1px, transparent 1px);
+  background-size: 28px 28px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 78%);
+  pointer-events: none;
+}
+
+.df-hero .vk-hero__inner {
+  align-items: center;
+}
+
+.df-hero-copy {
+  max-inline-size: 44rem;
+}
+
+.df-hero-lede {
+  max-inline-size: 42rem;
+}
+
+/* The portrait: a plain square with a violet edge, not a floating circle. */
+.df-portrait {
+  position: relative;
+  inline-size: min(19rem, 62vw);
+  aspect-ratio: 4 / 5;
+  border-radius: var(--vk-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--vk-color-border);
+  box-shadow: var(--vk-shadow-lg);
+}
+
+.df-portrait img {
+  object-fit: cover;
+}
+
+.df-portrait::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(200deg, transparent 55%, color-mix(in oklab, var(--vk-color-primary) 42%, transparent));
+  pointer-events: none;
+}
+
+.df-availability {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vk-space-2);
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vk-color-muted);
+}
+
+.df-availability::before {
+  content: '';
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--vk-radius-full);
+  background: var(--vk-color-success);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--vk-color-success) 25%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   5. Shared section furniture
+   -------------------------------------------------------------------------- */
+
+/* Mono, spaced, small — the label voice used above every section heading. */
+.df-eyebrow {
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vk-color-primary);
+  margin-block-end: var(--vk-space-3);
+}
+
+/* Every VivekUI section title picks up the display face. One flat class beats
+   the library's :where() selector, so no !important and no per-page override. */
+.vk-section__title {
+  font-family: var(--df-display);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Every band on the site shares one container width, so the left edge never
+   shifts between sections. That means capping the measure by hand where the
+   container is wider than a comfortable line length. */
+.vk-section__description,
+.vk-faq__answer,
+.vk-cta__content {
+  max-inline-size: 46rem;
+}
+
+.vk-faq__list {
+  max-inline-size: 56rem;
+}
+
+/* Both charts render a visually hidden <table> of their numbers so screen
+   readers get the data, not "graphic". A <table> ignores the `inline-size: 1px`
+   that hides it and keeps its min-content width, so on a 320px screen it pushes
+   the document sideways. Clipping it against the chart root costs nothing —
+   the chart is a self-contained SVG. */
+.vk-chart,
+.vk-sparkline {
+  position: relative;
+  overflow: clip;
+}
+
+.df-section-title {
+  font-family: var(--df-display);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.df-rule {
+  border: 0;
+  block-size: 1px;
+  background: var(--vk-color-border);
+  margin: 0;
+}
+
+/* Long-form copy.
+
+   VivekUI 0.5.0 sets `margin-block: 0` on `.vk-prose p` after its own
+   `> * + *` rhythm rule, and since both selectors are :where()-wrapped at
+   specificity zero the later one wins — so paragraphs run together. One flat
+   class puts the rhythm back; no !important needed. */
+.vk-prose > * + * {
+  margin-block-start: var(--vk-space-5);
+}
+
+.vk-prose > h2 + *,
+.vk-prose > h3 + * {
+  margin-block-start: var(--vk-space-3);
+}
+
+.vk-prose > h2 {
+  margin-block-start: var(--vk-space-10);
+  font-family: var(--df-display);
+  letter-spacing: -0.02em;
+}
+
+.vk-prose > :first-child {
+  margin-block-start: 0;
+}
+
+/* --------------------------------------------------------------------------
+   6. Tech marquee
+   -------------------------------------------------------------------------- */
+
+.df-marquee {
+  border-block: 1px solid var(--vk-color-border-subtle);
+  padding-block: var(--vk-space-6);
+  background: var(--vk-color-surface-subtle);
+  /* Belt and braces with `#main { min-inline-size: 0 }` above: the ticker track
+     is intentionally far wider than the screen and must never widen the page. */
+  overflow: clip;
+  min-inline-size: 0;
+}
+
+.df-marquee-item {
+  font-family: var(--vk-font-mono);
+  letter-spacing: 0.02em;
+}
+
+/* --------------------------------------------------------------------------
+   7. Stats row
+   -------------------------------------------------------------------------- */
+
+.df-stats .vk-stats__value {
+  font-family: var(--df-display);
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
+  letter-spacing: -0.03em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-2);
+  align-items: flex-start;
+}
+
+.df-spark {
+  inline-size: 100%;
+  max-inline-size: 11rem;
+  color: var(--vk-color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   8. Project bento + cards
+   -------------------------------------------------------------------------- */
+
+.df-tile {
+  position: relative;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  container-type: inline-size;
+  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.df-tile[data-layout='wide'] .df-tile-media {
+  aspect-ratio: 16 / 9;
+}
+
+/* The one horizontal tile in the bento: media beside the copy, once there is room. */
+@container (min-width: 44rem) {
+  .df-tile[data-layout='wide'] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    align-items: stretch;
+  }
+
+  .df-tile[data-layout='wide'] .df-tile-media {
+    aspect-ratio: auto;
+    block-size: 100%;
+    min-block-size: 15rem;
+  }
+
+  .df-tile[data-layout='wide'] .df-tile-body {
+    padding: var(--vk-space-8);
+    justify-content: center;
+  }
+}
+
+.df-tile:hover {
+  border-color: color-mix(in oklab, var(--vk-color-primary) 45%, var(--vk-color-border));
+  background: var(--df-tile-hover);
+}
+
+.df-tile:focus-within {
+  border-color: var(--vk-color-primary);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .df-tile:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.df-tile-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--vk-color-surface-sunken);
+  overflow: hidden;
+}
+
+.df-tile-media img {
+  object-fit: cover;
+  transition: scale 400ms cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .df-tile:hover .df-tile-media img {
+    scale: 1.03;
+  }
+}
+
+.df-tile-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-3);
+  padding: var(--vk-space-5);
+  flex: 1;
+}
+
+.df-tile-title {
+  font-family: var(--df-display);
+  letter-spacing: -0.02em;
+}
+
+/* The whole tile is clickable, but only the title is a real link. */
+.df-stretch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.df-tile-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.df-tile-link:hover {
+  color: var(--vk-color-primary);
+}
+
+/* The measurable outcome, set apart from the description. */
+.df-outcome {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vk-space-2);
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-sm);
+  font-weight: 600;
+  color: var(--vk-color-primary);
+}
+
+.df-outcome::before {
+  content: '';
+  inline-size: 1.25rem;
+  block-size: 2px;
+  background: currentColor;
+  border-radius: var(--vk-radius-full);
+}
+
+.df-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vk-space-2);
+  margin-block-start: auto;
+  padding-block-start: var(--vk-space-2);
+}
+
+/* --------------------------------------------------------------------------
+   9. Case study
+   -------------------------------------------------------------------------- */
+
+.df-case-hero {
+  border-block-end: 1px solid var(--vk-color-border-subtle);
+}
+
+.df-case-title {
+  font-family: var(--df-display);
+  letter-spacing: -0.03em;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.df-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--vk-space-6);
+  padding-block: var(--vk-space-6);
+  border-block-start: 1px solid var(--vk-color-border-subtle);
+}
+
+.df-meta dt {
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vk-color-muted);
+  margin-block-end: var(--vk-space-1);
+}
+
+.df-meta dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.df-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--vk-space-4);
+}
+
+.df-metric {
+  padding: var(--vk-space-5);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--vk-radius-lg);
+  background: var(--vk-color-surface);
+}
+
+.df-metric-value {
+  font-family: var(--df-display);
+  font-size: var(--vk-text-xl);
+  letter-spacing: -0.02em;
+  color: var(--vk-color-primary);
+}
+
+.df-shot {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--vk-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--vk-color-border);
+  background: var(--vk-color-surface-sunken);
+}
+
+.df-shot img {
+  object-fit: cover;
+}
+
+/* prev / next at the foot of a case study */
+.df-pager {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--vk-space-4);
+  border-block-start: 1px solid var(--vk-color-border);
+  padding-block-start: var(--vk-space-8);
+}
+
+.df-pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-1);
+  padding: var(--vk-space-5);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--vk-radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.df-pager-link:hover {
+  border-color: var(--vk-color-primary);
+  background: var(--df-tile-hover);
+}
+
+.df-pager-link[data-direction='next'] {
+  text-align: end;
+  align-items: flex-end;
+}
+
+.df-pager-label {
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vk-color-muted);
+}
+
+/* --------------------------------------------------------------------------
+   10. About
+   -------------------------------------------------------------------------- */
+
+.df-skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-3);
+  padding-block: var(--vk-space-6);
+  border-block-start: 1px solid var(--vk-color-border-subtle);
+}
+
+.df-chart-card {
+  padding: var(--vk-space-6);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--vk-radius-lg);
+  background: var(--vk-color-surface);
+}
+
+/* --------------------------------------------------------------------------
+   11. Contact
+   -------------------------------------------------------------------------- */
+
+.df-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-5);
+  max-inline-size: 34rem;
+}
+
+.df-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--vk-space-5);
+}
+
+.df-contact-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-5);
+  padding: var(--vk-space-6);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--vk-radius-lg);
+  background: var(--vk-color-surface-subtle);
+  block-size: fit-content;
+}
+
+/* --------------------------------------------------------------------------
+   12. Built with / install command
+   -------------------------------------------------------------------------- */
+
+.df-install {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vk-space-3);
+  padding: var(--vk-space-3) var(--vk-space-4);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--vk-radius-md);
+  background: var(--vk-color-surface-sunken);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
+.df-install code {
+  font-size: var(--vk-text-sm);
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* --------------------------------------------------------------------------
+   13. Footer
+   -------------------------------------------------------------------------- */
+
+.df-footer {
+  border-block-start: 1px solid var(--vk-color-border);
+}
+
+.df-footer-credit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-4);
+  max-inline-size: 34rem;
+}
+
+.df-wordmark {
+  font-family: var(--df-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: var(--vk-text-lg);
+}
+
+.df-wordmark span {
+  color: var(--vk-color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   14. Utilities
+   -------------------------------------------------------------------------- */
+
+.df-stack-lg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vk-space-8);
+}
+
+.df-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+  gap: var(--vk-space-10);
+  align-items: start;
+}
+
+.df-mono {
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-sm);
+}
+
+.df-nowrap {
+  white-space: nowrap;
+}
+
+.df-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
