@@ -1,0 +1,7 @@
+{
+  "browserslist": ["supports css-text-wrap-balance", "not dead"],
+  "hints": {
+    "compat-api/css": "warning",
+    "compat-api/css-next": "off"
+  }
+}

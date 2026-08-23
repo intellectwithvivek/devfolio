@@ -5,6 +5,12 @@
    specificity zero, so a single flat class here always wins. There is no
    !important anywhere in this file, and there does not need to be.
 
+   Browser support is declared by `browserslist` in package.json as
+   "supports css-text-wrap-balance" — that is genuinely the newest feature
+   used here, so the query stays honest as this file changes. The one
+   exception is `mask-image`, which needs Chrome 120 unprefixed and so ships
+   with its -webkit- prefix alongside.
+
    Order: tokens → base → signature element → sections → utilities.
    ========================================================================== */
 
@@ -440,6 +446,11 @@ body {
 }
 
 .df-tile:hover {
+  /* Two declarations on purpose. An unsupported color-mix() is invalid at
+     computed-value time, and border-color would then fall back to
+     `currentColor` — a bright hairline on every hovered tile. The plain
+     accent below catches that; the mix refines it where it is understood. */
+  border-color: var(--vk-color-primary);
   border-color: color-mix(in oklab, var(--vk-color-primary) 45%, var(--vk-color-border));
   background: var(--df-tile-hover);
 }
@@ -682,15 +693,21 @@ body {
   border: 1px solid var(--vk-color-border);
   border-radius: var(--vk-radius-lg);
   background: var(--vk-color-surface-subtle);
-  block-size: fit-content;
 }
 
 /* --------------------------------------------------------------------------
    12. Built with / install command
    -------------------------------------------------------------------------- */
 
+/* Shrink-wraps the command rather than filling the column.
+
+   `inline-flex` handles that in a block parent (the /built-with section) and
+   `align-self: start` handles it in a flex parent (the footer brand column),
+   which is why both are here — the box appears in one of each. */
 .df-install {
-  display: flex;
+  display: inline-flex;
+  align-self: start;
+  vertical-align: top;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--vk-space-3);
@@ -698,7 +715,6 @@ body {
   border: 1px solid var(--vk-color-border);
   border-radius: var(--vk-radius-md);
   background: var(--vk-color-surface-sunken);
-  inline-size: fit-content;
   max-inline-size: 100%;
 }
 
