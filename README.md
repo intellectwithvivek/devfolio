@@ -17,7 +17,7 @@
 
 _Screenshot placeholder — run the site, take a 1600×1000 capture of the homepage, save it to `public/screenshot.png` and uncomment the line above._
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fintellectwithvivek%2Fnextjs-portfolio-template-vivekui)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fintellectwithvivek%2Fdevfolio)
 
 </div>
 
@@ -36,8 +36,8 @@ _Screenshot placeholder — run the site, take a 1600×1000 capture of the homep
 ## Quick start
 
 ```bash
-git clone https://github.com/intellectwithvivek/nextjs-portfolio-template-vivekui.git
-cd nextjs-portfolio-template-vivekui
+git clone https://github.com/intellectwithvivek/devfolio.git
+cd devfolio
 npm install
 npm run dev
 ```

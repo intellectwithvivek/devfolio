@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Badge, Navbar, ThemeToggle } from '@the_viveksingh/vivek-ui'
 
+import { GitHubIcon } from '@/components/icons'
 import { LINKS, SITE, vivekui } from '@/data/site'
 
 const NAV = [
@@ -46,6 +47,21 @@ export function SiteHeader() {
             <span className="df-badge-short">⚡ VivekUI</span>
           </Badge>
         </a>
+
+        {/* This site's own source. IconButton is button-only — no `asChild` — and a
+            link that navigates has to be an anchor, so this is a plain <a> sized to
+            match the theme toggle beside it. */}
+        <a
+          href={SITE.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="df-icon-link"
+          aria-label={`${SITE.name} source on GitHub (opens in a new tab)`}
+          title="View the source on GitHub"
+        >
+          <GitHubIcon />
+        </a>
+
         <ThemeToggle mode="cycle" />
         <Navbar.Toggle />
       </Navbar.Actions>

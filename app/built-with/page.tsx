@@ -3,7 +3,7 @@ import { Badge, Breadcrumb, Button, Code, CopyButton, Heading, Section, Stack, T
 
 import { JsonLd } from '@/components/json-ld'
 import { COMPONENTS_USED } from '@/data/components-used'
-import { INSTALL_COMMAND, LINKS, SITE, componentDocs, vivekui } from '@/data/site'
+import { INSTALL_COMMAND, LINKS, REPO_LABEL, SITE, componentDocs, vivekui } from '@/data/site'
 import { breadcrumbSchema } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
@@ -125,7 +125,7 @@ export default function BuiltWithPage() {
         </Stack>
 
         <Text size="sm" tone="muted" style={{ marginBlockStart: 'var(--vk-space-5)' }}>
-          The template repository is <code>nextjs-portfolio-template-vivekui</code>, MIT licensed. Keep the
+          The template repository is <code>{REPO_LABEL}</code>, MIT licensed. Keep the
           footer credit if you like it; a GitHub star is appreciated either way.
         </Text>
       </Section>

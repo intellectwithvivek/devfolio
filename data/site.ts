@@ -10,9 +10,16 @@ export const SITE = {
   tagline: 'A free, open-source Next.js portfolio template',
   /** Change this to your own domain after you deploy. */
   url: 'https://portfolio-vivekui.vercel.app',
-  repo: 'https://github.com/intellectwithvivek/nextjs-portfolio-template-vivekui',
+  /**
+   * This site's own source. Linked from the navbar and the footer, because the
+   * whole point of the build is that a visitor can read it and reuse it.
+   */
+  repo: 'https://github.com/intellectwithvivek/devfolio',
   locale: 'en_US',
 } as const
+
+/** Short form for display, e.g. next to the GitHub mark in the footer. */
+export const REPO_LABEL = 'intellectwithvivek/devfolio'
 
 export const PACKAGE = '@the_viveksingh/vivek-ui'
 export const INSTALL_COMMAND = `npm i ${PACKAGE}`

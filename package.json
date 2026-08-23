@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-portfolio-template-vivekui",
+  "name": "devfolio",
   "version": "1.0.0",
   "private": false,
   "scripts": {
@@ -41,7 +41,7 @@
   "author": "Vivek Kumar Singh (https://vivekkumarsingh.in)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/intellectwithvivek/nextjs-portfolio-template-vivekui.git"
+    "url": "git+https://github.com/intellectwithvivek/devfolio.git"
   },
   "homepage": "https://portfolio-vivekui.vercel.app",
   "engines": {

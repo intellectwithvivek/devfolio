@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { Code, CopyButton, Footer, Text } from '@the_viveksingh/vivek-ui'
 
+import { GitHubIcon } from '@/components/icons'
 import { PROFILE } from '@/data/profile'
-import { INSTALL_COMMAND, LINKS, SITE, vivekui } from '@/data/site'
+import { INSTALL_COMMAND, LINKS, REPO_LABEL, SITE, vivekui } from '@/data/site'
 
 /**
  * Promotion kit, surface 1 of 4: the footer credit, on every page.
@@ -31,6 +32,16 @@ export function SiteFooter() {
           </div>
         </div>
       }
+      social={
+        // This site's own source, so a visitor can read it and reuse it. The mark
+        // is decorative; the visible text is what names the link.
+        <a className="df-repo-link" href={SITE.repo} target="_blank" rel="noopener noreferrer">
+          <GitHubIcon />
+          <span>
+            Source on GitHub <span className="df-repo-slug">{REPO_LABEL}</span>
+          </span>
+        </a>
+      }
       columns={[
         {
           title: 'Portfolio',
@@ -39,6 +50,7 @@ export function SiteFooter() {
             { label: 'About', href: '/about' },
             { label: 'Contact', href: '/contact' },
             { label: 'Built with VivekUI', href: '/built-with' },
+            { label: 'Source code', href: SITE.repo, target: '_blank' },
           ],
         },
         {

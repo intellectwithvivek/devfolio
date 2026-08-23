@@ -136,6 +136,32 @@ body {
   }
 }
 
+/* A square icon link in the navbar.
+
+   Deliberately not VivekUI's IconButton: that renders a <button>, and a control
+   that navigates must be an <a> or middle-click, cmd-click and "copy link
+   address" all break. These values mirror `.vk-icon-button[data-size=md]` so it
+   lines up with the ThemeToggle sitting next to it. */
+.df-icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.5rem;
+  aspect-ratio: 1;
+  flex: none;
+  border: 1px solid transparent;
+  border-radius: var(--vk-radius-md);
+  color: var(--vk-color-fg);
+  text-decoration: none;
+  transition: background-color var(--vk-duration, 160ms) var(--vk-ease, ease),
+    color var(--vk-duration, 160ms) var(--vk-ease, ease);
+}
+
+.df-icon-link:hover {
+  background: var(--vk-color-surface-hover);
+  color: var(--vk-color-primary);
+}
+
 /* --------------------------------------------------------------------------
    3. The signature element
 
@@ -748,6 +774,40 @@ body {
 
 .df-wordmark span {
   color: var(--vk-color-primary);
+}
+
+/* "Source on GitHub" under the footer brand. The mark is decorative; the text
+   next to it is what names the link. */
+.df-repo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vk-space-3);
+  padding: var(--vk-space-2) var(--vk-space-4) var(--vk-space-2) var(--vk-space-3);
+  border: 1px solid var(--vk-color-border);
+  border-radius: var(--vk-radius-full);
+  color: var(--vk-color-fg);
+  font-size: var(--vk-text-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.df-repo-link:hover {
+  border-color: var(--vk-color-primary);
+  background: var(--df-tile-hover);
+  color: var(--vk-color-primary);
+}
+
+.df-repo-slug {
+  display: block;
+  font-family: var(--vk-font-mono);
+  font-size: var(--vk-text-xs);
+  font-weight: 400;
+  color: var(--vk-color-muted);
+}
+
+.df-repo-link:hover .df-repo-slug {
+  color: inherit;
 }
 
 /* --------------------------------------------------------------------------
