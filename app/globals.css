@@ -776,6 +776,14 @@ body {
   color: var(--vk-color-primary);
 }
 
+/* Mark beside wordmark. The navbar gets this spacing from Navbar.Brand already;
+   this is for the footer, where the lockup stands on its own. */
+.df-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vk-space-3);
+}
+
 /* "Source on GitHub" under the footer brand. The mark is decorative; the text
    next to it is what names the link. */
 .df-repo-link {

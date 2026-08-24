@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Badge, Navbar, ThemeToggle } from '@the_viveksingh/vivek-ui'
 
 import { GitHubIcon } from '@/components/icons'
+import { Logo } from '@/components/logo'
 import { LINKS, SITE, vivekui } from '@/data/site'
 
 const NAV = [
@@ -21,6 +22,9 @@ export function SiteHeader() {
     <Navbar sticky container="xl">
       <Navbar.Brand asChild>
         <Link href="/" aria-label={`${SITE.name} — home`}>
+          {/* Navbar.Brand already sizes a direct svg child to 1.5em and gaps it
+              from the text, so the lockup needs no CSS of its own. */}
+          <Logo id="nav" />
           <span className="df-wordmark">
             Dev<span>Folio</span>
           </span>

@@ -25,11 +25,14 @@ export default function manifest(): MetadataRoute.Manifest {
     dir: 'ltr',
     categories: ['portfolio', 'developer tools', 'productivity'],
     icons: [
-      {
-        src: '/favicon.ico',
-        sizes: '48x48',
-        type: 'image/x-icon',
-      },
+      { src: '/favicon.ico', sizes: '16x16 32x32 48x48 64x64 128x128 256x256', type: 'image/x-icon' },
+      { src: '/logo.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
+      { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      // A separate file, not the same PNG relabelled. A launcher crops a
+      // maskable icon to its own shape, so this variant runs the gradient edge
+      // to edge — the rounded corners of the normal tile would be cropped as
+      // notches — and holds the mark inside the central 80% safe zone.
+      { src: '/icon-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
   }
 }
