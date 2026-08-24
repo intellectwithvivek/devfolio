@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="./public/logo.svg" width="88" height="88" alt="">
+
 # DevFolio — a free Next.js portfolio template
 
 **A production-quality developer portfolio built entirely with [VivekUI](https://ui.vivekkumarsingh.in). Next.js 16 · React 19 · TypeScript · zero runtime UI dependencies.**
@@ -84,6 +86,16 @@ Everything you need to change is data, not markup.
 
 **Before you deploy**, set `SITE.url` in `data/site.ts` to your own domain — it is the `metadataBase` for every canonical URL, OpenGraph tag and sitemap entry.
 
+**Replace the mark.** `app/icon.svg` is the single source for the whole icon set — a drawn "D" on a violet tile with the site's signature accent rule beneath it. The letterform is drawn rather than set from a font, because at 16px a real glyph's thin joins vanish and the counter fills in. Edit that one file, then:
+
+```bash
+npm run icons
+```
+
+That rewrites `app/favicon.ico` (six PNG-in-ICO sizes), `app/apple-icon.png`, `public/icon-512.png`, `public/icon-maskable.png` and `public/logo.svg`. Commit what it writes — they are derived files, but checked in, so a fresh clone is complete and nothing re-derives them per request. `components/logo.tsx` carries the same geometry inline for the navbar and footer, and takes a required `id` because two copies on one page need distinct gradient ids.
+
+The maskable icon is a separate file, not the same PNG relabelled: a launcher crops it to its own shape, so it runs the gradient edge to edge and keeps the mark inside the central 80% safe zone.
+
 **Add a résumé** by dropping a PDF in `public/` and pointing `components/resume-button.tsx` at it; right now it opens a toast explaining that this is a demo.
 
 **Wire up the contact form** in `components/contact-form.tsx` — validation and the confirmation toast are already there, it just needs somewhere to POST.
@@ -135,11 +147,14 @@ app/
   globals.css          The only stylesheet
   sitemap.ts robots.ts manifest.ts
   opengraph-image.tsx  Generated 1200x630 share card (one per route)
+  icon.svg             The brand mark — source for the whole icon set
+  favicon.ico apple-icon.png   Generated from it by `npm run icons`
   projects/            Index, [slug] case study, loading states
   about/ contact/ built-with/
 components/            Site header, footer, project tile, forms, JSON-LD
 data/                  All content, typed
 lib/                   Metadata helpers, JSON-LD graph builders, OG card
+scripts/               generate-icons.mjs — rasterises the mark (npm run icons)
 assets/fonts/          Fonts read at build time to draw the OG cards
 public/llms.txt        Plain-text summary for answer engines
 ```

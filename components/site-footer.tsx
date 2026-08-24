@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Code, CopyButton, Footer, Text } from '@the_viveksingh/vivek-ui'
 
 import { GitHubIcon } from '@/components/icons'
+import { Logo } from '@/components/logo'
 import { PROFILE } from '@/data/profile'
 import { INSTALL_COMMAND, LINKS, REPO_LABEL, SITE, vivekui } from '@/data/site'
 
@@ -19,8 +20,11 @@ export function SiteFooter() {
       navLabel="Footer"
       brand={
         <div className="df-footer-credit">
-          <span className="df-wordmark">
-            Dev<span>Folio</span>
+          <span className="df-lockup">
+            <Logo id="footer" size="1.75em" />
+            <span className="df-wordmark">
+              Dev<span>Folio</span>
+            </span>
           </span>
           <Text tone="muted">
             Built with ❤️ using VivekUI — 91 React components · 6 SVG charts · zero runtime
