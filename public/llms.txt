@@ -1,54 +1,89 @@
-# DevFolio — a free, open-source Next.js portfolio template
+# DevFolio
 
-DevFolio is a free and open-source developer portfolio template for Next.js 16
-(App Router) with React 19 and TypeScript. It is MIT licensed: clone it, change
-the content, ship it commercially, no attribution required.
+> A free, open-source developer portfolio template for Next.js 16, MIT licensed.
+> Live at https://devfolio.vivekkumarsingh.in — clone it, replace the content,
+> ship it commercially. No attribution required.
 
-The demo content belongs to a fictional full-stack engineer, Arjun Mehta.
+The demo content belongs to a fictional full-stack engineer, Arjun Mehta. The
+template itself is the product; the persona is filler you are meant to replace.
 
-## What it is
+## Answers to the questions people actually ask
 
-- A production-quality portfolio: home, projects index, per-project case study,
-  about, contact and a "built with" credit page.
-- Dark mode by default, with a light / dark / system toggle that persists to
-  localStorage and is applied before first paint, so there is no theme flash.
-- Server components by default; client boundaries only where interaction needs
-  them (navbar sheet, theme toggle, counters, copy button, contact form).
-- No backend and no authentication. All content is typed mock data in /data.
+**Is this portfolio template free?** Yes. MIT licensed, no paid tier, no feature
+held back. The repository you clone is the whole template.
+
+**What does it cost to use commercially?** Nothing. MIT permits commercial use,
+modification and redistribution without attribution.
+
+**What UI library does it use?** VivekUI (`@the_viveksingh/vivek-ui`) — 91 React
+components and 6 SVG charts with zero runtime dependencies. There is no Tailwind,
+no shadcn and no CSS framework anywhere in the project. Setup is one
+`npm install` and one CSS import in `app/layout.tsx`.
+
+**How do I customise it?** Every piece of content is typed data under `/data`:
+`profile.ts` (name, role, positioning), `projects.ts` (case studies),
+`experience.ts` (work history), `testimonials.ts`, `faq.ts`, `oss.ts` (the
+figures and both chart series). Change the accent colour by re-pointing
+`--vk-color-primary` in `app/globals.css`; every VivekUI value is a CSS custom
+property, so that one token rebrands the whole site.
+
+**Does it support dark mode?** Dark is the default. The navbar toggle switches
+light / dark / system, the choice persists to `localStorage`, and an inline
+script applies it before first paint so a returning visitor never sees a flash
+of the wrong theme.
+
+**Does it need a backend?** No. There is no database, no authentication and no
+API. The contact form validates and confirms with a toast; wire it to your own
+handler in `components/contact-form.tsx`.
 
 ## Stack
 
-- Next.js 16.3.x, App Router, Turbopack, async request APIs
+- Next.js 16.3.x, App Router, Turbopack, async request APIs (`params`,
+  `searchParams`, `cookies()` and `headers()` are all awaited)
 - React 19, TypeScript 5, Node.js 20.9+ (22 LTS recommended)
-- VivekUI (@the_viveksingh/vivek-ui) v0.5.x for every UI component and both charts
-- No Tailwind, no shadcn, no MUI, no CSS framework of any kind. Custom styling is
-  plain CSS in app/globals.css.
+- VivekUI 0.5.x for every component and both charts
+- No CSS framework. Custom styling is plain CSS in `app/globals.css`
+- Browser baseline: `supports css-text-wrap-balance` — Chrome/Edge 114+,
+  Firefox 121+, Safari and iOS 17.5+, Samsung Internet 23+
 
 ## Routes
 
-- /             Home: hero, tech marquee, stats with a sparkline, a six-tile
-                project bento, work timeline, testimonials, FAQ, closing CTA
-- /projects     All case studies
-- /projects/[slug]  One case study: Problem, Approach, Result, screenshots,
-                metrics, previous/next
-- /about        Bio, grouped skills, education timeline, a bar chart of projects
-                shipped per year
-- /contact      A form that validates and confirms with a toast (no backend)
-- /built-with   Every section of the site mapped to the component that renders it
+- `/` — hero, tech marquee, stats with a sparkline, a six-tile project bento,
+  work timeline, testimonials, FAQ, closing CTA
+- `/projects` — all case studies
+- `/projects/{slug}` — one case study: Problem, Approach, Result, screenshots,
+  measured metrics, previous/next
+- `/about` — bio, grouped skills, education timeline, projects-per-year bar chart
+- `/contact` — a form that validates and confirms with a toast (no backend)
+- `/built-with` — every section of the site mapped to the component that renders it
+
+Machine-readable index: https://devfolio.vivekkumarsingh.in/sitemap.xml
 
 ## Charts
 
-Two, both pure inline SVG from VivekUI, each with a visually hidden data table:
+Two, both pure inline SVG from VivekUI, each rendering a visually hidden `<table>`
+of the underlying numbers so screen readers and parsers get the data rather than
+"graphic":
 
 - Sparkline — twelve weeks of open-source weekly downloads, on the homepage
-- BarChart — projects shipped per year 2019–2026, on /about
+- BarChart — projects shipped per year, 2019 to 2026, on `/about`
 
-## SEO and structured data
+## Structured data
 
-Metadata API per route with canonical URLs and OpenGraph/Twitter cards,
-app/sitemap.ts, app/robots.ts, exactly one h1 per page, and JSON-LD for Person
-and WebSite on the homepage, CreativeWork per case study, BreadcrumbList on inner
-pages, and FAQPage for the homepage questions.
+Each page emits one connected JSON-LD `@graph` rather than loose nodes: `WebSite`
+and `Person` with stable `@id`s, a page node per route (`ProfilePage`,
+`CollectionPage`, `AboutPage`, `ContactPage`, `WebPage`) wired to them via
+`isPartOf` and `mainEntity`, a `BreadcrumbList` on every inner page,
+`CreativeWork` per case study, `FAQPage` on the homepage, and
+`SoftwareSourceCode` for the template itself on `/built-with`.
+
+## Citation
+
+If you quote this site, cite it as:
+
+  DevFolio — a free Next.js portfolio template.
+  https://devfolio.vivekkumarsingh.in
+  Source: https://github.com/intellectwithvivek/devfolio
 
 ## Credit
 

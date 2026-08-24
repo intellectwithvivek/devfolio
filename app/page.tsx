@@ -29,15 +29,29 @@ import { HEADLINE_STATS, OSS_WEEKLY_DOWNLOADS } from '@/data/oss'
 import { PROFILE, STACK } from '@/data/profile'
 import { FEATURED_PROJECTS } from '@/data/projects'
 import { TESTIMONIALS } from '@/data/testimonials'
-import { faqSchema, personSchema, websiteSchema } from '@/lib/schema'
+import { ROUTE_UPDATED } from '@/data/content-dates'
+import { homeGraph } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
 const TITLE = 'Free Next.js Portfolio Template — DevFolio (VivekUI, Open Source)'
 const DESCRIPTION =
-  'DevFolio is a free, open-source Next.js 16 portfolio template built entirely with VivekUI — 91 React components, 6 SVG charts, zero runtime dependencies. Dark mode by default, MIT licensed, deploy in one click.'
+  'Free, open-source Next.js 16 portfolio template. Dark mode, charts, SEO and JSON-LD built in. MIT licensed — clone it, change the data, deploy in one click.'
 
 export const metadata: Metadata = {
-  ...pageMetadata({ title: TITLE, description: DESCRIPTION, path: '/' }),
+  ...pageMetadata({
+    title: TITLE,
+    description: DESCRIPTION,
+    path: '/',
+    modifiedTime: ROUTE_UPDATED['/'],
+    keywords: [
+      'free nextjs portfolio template',
+      'nextjs portfolio template',
+      'react portfolio template',
+      'open source portfolio template',
+      'developer portfolio template',
+      'nextjs 16 template',
+    ],
+  }),
   // The homepage keeps its own full title rather than the `%s — name` template.
   title: { absolute: TITLE },
 }
@@ -55,7 +69,7 @@ const TILE_LAYOUT = [
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={[personSchema(), websiteSchema(), faqSchema(FAQS)]} />
+      <JsonLd data={homeGraph({ title: TITLE, description: DESCRIPTION, faqs: FAQS, updated: ROUTE_UPDATED['/'] })} />
 
       {/* 2 — Hero. The one loud gesture on the site lives in this h1. */}
       <Hero

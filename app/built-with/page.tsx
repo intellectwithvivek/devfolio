@@ -4,14 +4,26 @@ import { Badge, Breadcrumb, Button, Code, CopyButton, Heading, Section, Stack, T
 import { JsonLd } from '@/components/json-ld'
 import { COMPONENTS_USED } from '@/data/components-used'
 import { INSTALL_COMMAND, LINKS, REPO_LABEL, SITE, componentDocs, vivekui } from '@/data/site'
-import { breadcrumbSchema } from '@/lib/schema'
+import { ROUTE_UPDATED } from '@/data/content-dates'
+import { builtWithGraph } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
+const TITLE = 'Built with VivekUI'
+const DESCRIPTION =
+  'Every section of this free Next.js portfolio template mapped to the VivekUI component behind it — 38 components, 2 SVG charts, zero runtime dependencies.'
+
 export const metadata: Metadata = pageMetadata({
-  title: 'Built with VivekUI',
-  description:
-    'Every section of this free Next.js portfolio template, mapped to the VivekUI component that powers it — 38 components and 2 SVG charts, zero runtime dependencies, one CSS import.',
+  title: TITLE,
+  description: DESCRIPTION,
   path: '/built-with',
+  modifiedTime: ROUTE_UPDATED['/built-with'],
+  keywords: [
+    'free nextjs portfolio template',
+    'react component library',
+    'VivekUI',
+    'zero dependency react components',
+    'tailwind alternative',
+  ],
 })
 
 export default function BuiltWithPage() {
@@ -20,10 +32,7 @@ export default function BuiltWithPage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Built with VivekUI', path: '/built-with' },
-        ])}
+        data={builtWithGraph({ title: TITLE, description: DESCRIPTION, updated: ROUTE_UPDATED['/built-with'] })}
       />
 
       <Section size="xl" padding="lg">

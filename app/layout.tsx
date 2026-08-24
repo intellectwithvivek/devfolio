@@ -10,7 +10,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { ThemeScript } from '@/components/theme-script'
 import { PROFILE } from '@/data/profile'
-import { SITE } from '@/data/site'
+import { SITE, VERIFICATION } from '@/data/site'
 
 const display = Bricolage_Grotesque({
   subsets: ['latin'],
@@ -52,11 +52,33 @@ export const metadata: Metadata = {
     'developer portfolio',
     'VivekUI',
   ],
+  publisher: PROFILE.name,
+  category: 'technology',
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
+    googleBot: {
+      index: true,
+      follow: true,
+      // Without these three, Google caps what it may show: a thumbnail-sized
+      // image, a short snippet, and no video preview. `large` is what gets a
+      // proper image into Discover and AI Overviews.
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
   },
+  // Rendered only when the env var is set. DNS TXT verification on the apex
+  // domain is the better route — it covers every subdomain and cannot be lost
+  // to a deploy that drops the tag.
+  ...(VERIFICATION.google || VERIFICATION.bing
+    ? {
+        verification: {
+          ...(VERIFICATION.google ? { google: VERIFICATION.google } : {}),
+          ...(VERIFICATION.bing ? { other: { 'msvalidate.01': VERIFICATION.bing } } : {}),
+        },
+      }
+    : {}),
   formatDetection: { telephone: false, address: false, email: false },
 }
 

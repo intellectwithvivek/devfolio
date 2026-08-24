@@ -43,7 +43,7 @@
     "type": "git",
     "url": "git+https://github.com/intellectwithvivek/devfolio.git"
   },
-  "homepage": "https://portfolio-vivekui.vercel.app",
+  "homepage": "https://devfolio.vivekkumarsingh.in",
   "engines": {
     "node": ">=20.9.0"
   },

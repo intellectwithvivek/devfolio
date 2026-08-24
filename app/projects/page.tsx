@@ -5,24 +5,26 @@ import { Breadcrumb, EmptyState, Grid, Section, Button } from '@the_viveksingh/v
 import { JsonLd } from '@/components/json-ld'
 import { ProjectTile } from '@/components/project-tile'
 import { PROJECTS } from '@/data/projects'
-import { breadcrumbSchema } from '@/lib/schema'
+import { ROUTE_UPDATED } from '@/data/content-dates'
+import { projectsIndexGraph } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
+const TITLE = 'Projects'
+const DESCRIPTION =
+  'Six engineering case studies, each with the number it moved — payments reconciliation, self-hosted search, analytics, checkout and zero-downtime migrations.'
+
 export const metadata: Metadata = pageMetadata({
-  title: 'Projects',
-  description:
-    'Six case studies from eight years of full-stack work: payments reconciliation, self-hosted search, product analytics, checkout, zero-downtime migrations and developer documentation.',
+  title: TITLE,
+  description: DESCRIPTION,
   path: '/projects',
+  modifiedTime: ROUTE_UPDATED['/projects'],
 })
 
 export default function ProjectsPage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Projects', path: '/projects' },
-        ])}
+        data={projectsIndexGraph({ title: TITLE, description: DESCRIPTION, updated: ROUTE_UPDATED['/projects'] })}
       />
 
       <Section size="xl" padding="lg">

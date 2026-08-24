@@ -4,25 +4,25 @@ import { Breadcrumb, Divider, Heading, Section, Text } from '@the_viveksingh/viv
 import { ContactForm } from '@/components/contact-form'
 import { JsonLd } from '@/components/json-ld'
 import { PROFILE } from '@/data/profile'
-import { breadcrumbSchema } from '@/lib/schema'
+import { ROUTE_UPDATED } from '@/data/content-dates'
+import { contactGraph } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
+const TITLE = 'Contact'
+const DESCRIPTION =
+  'Start a project: full-stack engineering for payments, commerce and platform work. Tell me what you are building and what is going wrong. Reply in two days.'
+
 export const metadata: Metadata = pageMetadata({
-  title: 'Contact',
-  description:
-    'Start a project with Arjun Mehta — full-stack engineering for payments, commerce and platform work. Tell me what you are building and what is going wrong.',
+  title: TITLE,
+  description: DESCRIPTION,
   path: '/contact',
+  modifiedTime: ROUTE_UPDATED['/contact'],
 })
 
 export default function ContactPage() {
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Contact', path: '/contact' },
-        ])}
-      />
+      <JsonLd data={contactGraph({ title: TITLE, description: DESCRIPTION, updated: ROUTE_UPDATED['/contact'] })} />
 
       <Section size="xl" padding="lg">
         <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />

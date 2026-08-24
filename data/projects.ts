@@ -33,6 +33,17 @@ export interface Project {
   repoUrl: string
   /** Featured projects fill the homepage bento grid, in this order. */
   featured: boolean
+  /**
+   * ISO date the case study first went live, and the last time its text
+   * actually changed. Both are real dates, not build timestamps: they become
+   * `datePublished`/`dateModified` in JSON-LD and `<lastmod>` in the sitemap.
+   *
+   * Stamping every URL with the build time is the classic way to make `lastmod`
+   * worthless — Google leans on it only while it stays accurate, so bump
+   * `updatedAt` when you edit the words, and not otherwise.
+   */
+  publishedAt: string
+  updatedAt: string
 }
 
 /** A stable picsum URL for a seed. One place, so the dimensions never drift. */
@@ -91,6 +102,8 @@ export const PROJECTS: readonly Project[] = [
     liveUrl: 'https://example.com/ledgerloop',
     repoUrl: 'https://github.com/',
     featured: true,
+    publishedAt: '2026-03-18',
+    updatedAt: '2026-07-29',
   },
   {
     slug: 'atlas-search',
@@ -142,6 +155,8 @@ export const PROJECTS: readonly Project[] = [
     liveUrl: 'https://example.com/atlas-search',
     repoUrl: 'https://github.com/',
     featured: true,
+    publishedAt: '2025-09-02',
+    updatedAt: '2026-05-14',
   },
   {
     slug: 'pulse-analytics',
@@ -193,6 +208,8 @@ export const PROJECTS: readonly Project[] = [
     liveUrl: 'https://example.com/pulse',
     repoUrl: 'https://github.com/',
     featured: true,
+    publishedAt: '2025-06-11',
+    updatedAt: '2026-06-20',
   },
   {
     slug: 'northwind-checkout',
@@ -244,6 +261,8 @@ export const PROJECTS: readonly Project[] = [
     liveUrl: 'https://example.com/northwind-checkout',
     repoUrl: 'https://github.com/',
     featured: true,
+    publishedAt: '2024-11-05',
+    updatedAt: '2026-02-09',
   },
   {
     slug: 'warp-migrate',
@@ -295,6 +314,8 @@ export const PROJECTS: readonly Project[] = [
     liveUrl: 'https://example.com/warp-migrate',
     repoUrl: 'https://github.com/',
     featured: true,
+    publishedAt: '2023-08-22',
+    updatedAt: '2025-11-30',
   },
   {
     slug: 'meridian-docs',
@@ -346,6 +367,8 @@ export const PROJECTS: readonly Project[] = [
     liveUrl: 'https://example.com/meridian-docs',
     repoUrl: 'https://github.com/',
     featured: true,
+    publishedAt: '2022-10-14',
+    updatedAt: '2025-04-08',
   },
 ]
 

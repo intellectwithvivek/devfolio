@@ -17,7 +17,7 @@ import {
 
 import { JsonLd } from '@/components/json-ld'
 import { PROJECTS, getProject, getProjectNeighbours, shotUrl } from '@/data/projects'
-import { breadcrumbSchema, creativeWorkSchema } from '@/lib/schema'
+import { projectGraph } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
 /** All six case studies are prerendered at build time. */
@@ -46,7 +46,13 @@ export async function generateMetadata({
     title: `${project.name} — ${project.outcome}`,
     description: project.tagline,
     path: `/projects/${project.slug}`,
-    images: [shotUrl(project.cover.seed, 1200, 630)],
+    // No explicit `images`: opengraph-image.tsx next to this file generates a
+    // branded card carrying the project name and its outcome, which beats the
+    // raw cover photo for click-through.
+    type: 'article',
+    publishedTime: project.publishedAt,
+    modifiedTime: project.updatedAt,
+    keywords: [...project.tags, project.client, 'case study'],
   })
 }
 
@@ -60,16 +66,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
-      <JsonLd
-        data={[
-          creativeWorkSchema(project),
-          breadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'Projects', path: '/projects' },
-            { name: project.name, path: `/projects/${project.slug}` },
-          ]),
-        ]}
-      />
+      <JsonLd data={projectGraph(project)} />
 
       <Section className="df-case-hero" size="xl" padding="lg">
         <Breadcrumb

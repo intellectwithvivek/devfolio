@@ -7,25 +7,26 @@ import { JsonLd } from '@/components/json-ld'
 import { EDUCATION } from '@/data/experience'
 import { PROJECTS_PER_YEAR, PROJECTS_PER_YEAR_TAKEAWAY } from '@/data/oss'
 import { PROFILE, SKILL_GROUPS } from '@/data/profile'
-import { breadcrumbSchema } from '@/lib/schema'
+import { ROUTE_UPDATED } from '@/data/content-dates'
+import { aboutGraph } from '@/lib/schema'
 import { pageMetadata } from '@/lib/seo'
 
+const TITLE = 'About'
+const DESCRIPTION =
+  'Full-stack engineer in Bengaluru, eight years across fintech and commerce infrastructure. Skills, education, and projects shipped per year since 2019.'
+
 export const metadata: Metadata = pageMetadata({
-  title: 'About',
-  description:
-    'Arjun Mehta is a full-stack engineer in Bengaluru with eight years in fintech and commerce infrastructure. Skills, education and a count of projects shipped per year since 2019.',
+  title: TITLE,
+  description: DESCRIPTION,
   path: '/about',
+  type: 'profile',
+  modifiedTime: ROUTE_UPDATED['/about'],
 })
 
 export default function AboutPage() {
   return (
     <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'About', path: '/about' },
-        ])}
-      />
+      <JsonLd data={aboutGraph({ title: TITLE, description: DESCRIPTION, updated: ROUTE_UPDATED['/about'] })} />
 
       <Section size="xl" padding="lg">
         <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
