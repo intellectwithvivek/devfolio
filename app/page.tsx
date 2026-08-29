@@ -257,7 +257,7 @@ export default function HomePage() {
         size="xl"
         background="muted"
         name="devfolio-faq"
-        defaultOpen={0}
+        defaultOpenIndex={0}
         eyebrow={<p className="df-eyebrow">About this template</p>}
         title="Questions about DevFolio"
         description="DevFolio is free and open source. Here is what people ask before cloning it."
@@ -266,7 +266,7 @@ export default function HomePage() {
 
       <CTA
         size="xl"
-        variant="primary"
+        background="primary"
         title="Have a project in mind?"
         description="Tell me what you are building and what is going wrong. I reply to everything within two working days."
         actions={

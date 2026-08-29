@@ -80,7 +80,7 @@ export function ContactForm() {
         <TagInput
           name="services"
           value={services}
-          onChange={setServices}
+          onValueChange={setServices}
           max={8}
           placeholder="Add a service"
         />
